@@ -16,6 +16,9 @@ type (
 		// The second return value inidcates error, if any.
 		OpenTile(Point) (bool, error)
 
+		// OpenedTilesCount reports total number of tiles opened on the board, excluding balckholes
+		OpenedTilesCount() BoardArea
+
 		// Size returns a length of the board side.
 		Size() Coordinate
 
@@ -26,8 +29,9 @@ type (
 )
 
 type board struct {
-	tiles []Tile
-	size  Coordinate
+	tiles            []Tile
+	size             Coordinate
+	openedTilesCount BoardArea
 }
 
 // compile-time interface checking for Board implementation
@@ -68,6 +72,7 @@ func (b *board) OpenTile(p Point) (bool, error) {
 	if tile.IsBlackhole() {
 		return true, nil
 	}
+	b.openedTilesCount++
 
 	if tile.SurroundingBlackholesCount() == 0 {
 		for _, neighborPoint := range b.neighborPoints(p) {
@@ -78,6 +83,10 @@ func (b *board) OpenTile(p Point) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func (b board) OpenedTilesCount() BoardArea {
+	return b.openedTilesCount
 }
 
 func (b *board) Size() Coordinate {

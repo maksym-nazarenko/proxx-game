@@ -35,6 +35,8 @@ func realMain(config app.Configuration) error {
 		return err
 	}
 	board := game.NewBoard(config.BoardSize, config.BlackholesCount, game.DefaultBlackholesPlaceStrategy)
+	totalTilesCount := game.BoardArea(config.BoardSize * config.BoardSize)
+
 	app := tview.NewApplication()
 
 	table := createBoardUI(config.BoardSize)
@@ -44,6 +46,7 @@ func realMain(config app.Configuration) error {
 
 	go func() {
 		gameResult := <-resultChan
+		defer refreshBoardUI(board, table)
 		if gameResult {
 			helpText.SetText("You won!!!")
 			return
@@ -58,15 +61,19 @@ func realMain(config app.Configuration) error {
 			table.SetSelectable(true, true)
 		}
 	}).SetSelectedFunc(func(row, column int) {
-		cell := table.GetCell(row, column)
 		blackhole, err := board.OpenTile(game.NewPoint(game.Coordinate(column+1), game.Coordinate(row+1)))
 		if err != nil {
 			panic("wtf")
 		}
 		if blackhole {
-			cell.Text = "H"
 			resultChan <- false
+			return
 		}
+		if (game.BoardArea(totalTilesCount) - board.OpenedTilesCount()) == config.BlackholesCount {
+			resultChan <- true
+			return
+		}
+
 		refreshBoardUI(board, table)
 	})
 
