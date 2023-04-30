@@ -40,9 +40,10 @@ func realMain(config app.Configuration) error {
 	app := tview.NewApplication()
 
 	table := createBoardUI(config.BoardSize)
-	helpText := tview.NewTextView().SetText(
-		`Select a tile and press enter
-	it should open`)
+	helpText := tview.NewTextView().SetText(`Press 'ESC' at any time to exit the game. Press 'Enter' to start the game.`)
+
+	stats := tview.NewTextView().SetText("Stats:")
+	rules := tview.NewTextView().SetText("Rules")
 
 	go func() {
 		gameResult := <-resultChan
@@ -77,7 +78,7 @@ func realMain(config app.Configuration) error {
 		refreshBoardUI(board, table)
 	})
 
-	grid := createGridUI(table, helpText, nil)
+	grid := createGridUI(table, helpText, stats, rules)
 	app.SetRoot(grid, true)
 
 	return app.
@@ -100,13 +101,15 @@ func createBoardUI(size game.Coordinate) *tview.Table {
 	return table
 }
 
-func createGridUI(table, helpText, _ tview.Primitive) *tview.Grid {
+func createGridUI(table, helpText, stats, rules tview.Primitive) *tview.Grid {
 	return tview.NewGrid().
-		SetRows(3, 0).
-		SetColumns(0).
+		SetRows(2, 4, 0).
+		SetColumns(-2, -5).
 		SetBorders(true).
-		AddItem(helpText, 0, 0, 1, 1, 0, 0, false).
-		AddItem(table, 1, 0, 1, 1, 0, 0, true)
+		AddItem(helpText, 0, 0, 1, 2, 0, 0, false).
+		AddItem(stats, 1, 0, 1, 1, 0, 0, false).
+		AddItem(rules, 2, 0, 1, 1, 0, 0, false).
+		AddItem(table, 1, 1, 2, 1, 0, 0, true)
 }
 
 func refreshBoardUI(board game.Board, table *tview.Table) {
