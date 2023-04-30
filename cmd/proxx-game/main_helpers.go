@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gdamore/tcell/v2"
 	"github.com/maksym-nazarenko/proxx-game/internal/game"
 	"github.com/rivo/tview"
 )
@@ -40,15 +41,22 @@ func refreshBoardUI(board game.Board, table *tview.Table) {
 	for row := 1; row <= int(board.Size()); row++ {
 		for col := 1; col <= int(board.Size()); col++ {
 			tile, _ := board.TileAt(game.NewPoint(game.Coordinate(col), game.Coordinate(row)))
+			tableCellUI := table.GetCell(row-1, col-1)
 			if !tile.IsOpened() {
+				tableCellUI.
+					SetAttributes(tcell.AttrNone).
+					SetTextColor(tcell.ColorRoyalBlue)
 				continue
 			}
-			tableCellUI := table.GetCell(row-1, col-1)
 			if tile.IsBlackhole() {
 				tableCellUI.SetText("H")
 				continue
 			}
 			if tile.SurroundingBlackholesCount() > 0 {
+				tableCellUI.
+					SetAttributes(tcell.AttrBold).
+					SetTextColor(tcell.ColorDarkGray)
+
 				tableCellUI.Text = strconv.Itoa(int(tile.SurroundingBlackholesCount()))
 				continue
 			}

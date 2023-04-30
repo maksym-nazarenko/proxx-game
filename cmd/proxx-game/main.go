@@ -39,6 +39,7 @@ func realMain(config app.Configuration) error {
 	defer cancel()
 
 	board := game.NewBoard(config.BoardSize, config.BlackholesCount, game.DefaultBlackholesPlaceStrategy)
+
 	totalTilesCount := game.BoardArea(config.BoardSize * config.BoardSize)
 
 	app := tview.NewApplication()
@@ -46,7 +47,7 @@ func realMain(config app.Configuration) error {
 	table := createBoardUI(config.BoardSize)
 	helpText := tview.NewTextView().SetText(`Press 'ESC' at any time to exit the game.`)
 
-	stats := tview.NewTextView().SetText(" Press 'Enter' to start the game.")
+	stats := tview.NewTextView().SetText("Press 'Enter' to start the game.")
 	rules := tview.NewTextView().SetText("Rules")
 
 	go func() {
@@ -65,6 +66,7 @@ func realMain(config app.Configuration) error {
 			app.Stop()
 		case tcell.KeyEnter:
 			table.SetSelectable(true, true)
+			refreshBoardUI(board, table)
 			go updateStats(ctx, stats, app)
 		}
 	}).SetSelectedFunc(func(row, column int) {
