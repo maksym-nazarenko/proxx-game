@@ -13,3 +13,29 @@ When player opens a tile without blackhole behind it, the caption of the tile is
 Player wins when all the tiles without blackhole behind them are opened.
 
 Player loses when clicks on tile with blackhole.
+
+# Building the project
+
+Requirements:
+- [Go](https://go.dev/) with of version `'>= 1.20'`
+- (optional) `make` utility
+
+Build with `go` compiler:
+```sh
+$ go build ./cmd/...
+```
+
+or using `make` target:
+```sh
+$ make build
+```
+
+To see all available targets, run:
+```sh
+$ make help
+```
+
+Before submitting new PR, ensure that unit-tests and linter report no errors by running:
+```sh
+$ make lint test
+```

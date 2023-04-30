@@ -7,3 +7,6 @@ build: # build binary for the host platform
 
 test: # run unit-tests
 	@go test -v ./...
+
+lint: # run static analyzers
+	go vet ./...
