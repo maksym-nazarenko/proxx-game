@@ -1,3 +1,5 @@
 task/*
+.vscode
+/proxx-game
 
 !.gitkeep
