@@ -4,6 +4,7 @@ type outOfBoundsErr struct {
 	msg string
 }
 
+// NewOutOfBoundsError instantiates OutOfBounds error
 func NewOutOfBoundsError(msg string) *outOfBoundsErr {
 	return &outOfBoundsErr{msg}
 }

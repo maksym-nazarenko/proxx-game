@@ -2,7 +2,9 @@ package game
 
 type (
 	Coordinate = byte
-	Point      struct {
+
+	// Point represents coordinates on a two-dimension board.
+	Point struct {
 		x Coordinate
 		y Coordinate
 	}

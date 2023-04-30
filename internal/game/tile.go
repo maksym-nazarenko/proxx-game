@@ -2,11 +2,23 @@ package game
 
 // Tile interface defines capabilities of a particular cell on the board.
 type Tile interface {
+	// Blackhole marks current tile as blackhole or unmarks it if value is 'false'.
 	Blackhole(bool)
+
+	// IsBlackhole indicates whether current tile is blackhole.
 	IsBlackhole() bool
+
+	// IsOpened indicates whether current tile opened (revealed) or not.
 	IsOpened() bool
+
+	// Open marks current tile as opened.
 	Open()
+
+	// SurroundingBlackholesCount reports number of blackholes around
 	SurroundingBlackholesCount() byte
+
+	// SetSurroundingBlackholesCount updates number of adjacent blackholes.
+	SetSurroundingBlackholesCount(count byte)
 }
 
 type tile struct {
@@ -15,6 +27,7 @@ type tile struct {
 	surroundingBlackholesCount byte
 }
 
+// compile-time check for interface
 var _ Tile = (*tile)(nil)
 
 // NewTile creates new instance of `tile` without modifications - `zero` value.
@@ -47,4 +60,8 @@ func (c *tile) Open() {
 
 func (c *tile) SurroundingBlackholesCount() byte {
 	return c.surroundingBlackholesCount
+}
+
+func (c *tile) SetSurroundingBlackholesCount(count byte) {
+	c.surroundingBlackholesCount = count
 }
