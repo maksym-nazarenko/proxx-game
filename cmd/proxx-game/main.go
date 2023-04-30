@@ -48,17 +48,31 @@ func realMain(config app.Configuration) error {
 	helpText := tview.NewTextView().SetText(`Press 'ESC' at any time to exit the game.`)
 
 	stats := tview.NewTextView().SetText("Press 'Enter' to start the game.")
-	rules := tview.NewTextView().SetText("Rules")
+	rules := tview.NewTextView().
+		SetText(`Rules
+
+Open tiles one-by-one by clicking enter.
+If you open a tile with blackhole behind it, you lose.
+When all non-blackholes tiles are opened - you win.
+If you avoid blackhole, number on the tile tells you how many blackholes surround this tile (number in range 0..8)
+`)
 
 	go func() {
 		gameResult := <-resultChan
 		defer cancel()
+		defer app.Draw()
 		defer refreshBoardUI(board, table)
 		if gameResult {
-			helpText.SetText("You won!!!")
+			helpText.
+				SetText("You won!!!").
+				SetTextColor(tcell.ColorGreen).
+				SetBorderAttributes(tcell.AttrBold)
 			return
 		}
-		helpText.SetText("Game over. You were almost there...")
+		helpText.
+			SetText("Game over. You were almost there...").
+			SetTextColor(tcell.ColorDarkRed).
+			SetBorderAttributes(tcell.AttrBold)
 	}()
 	table.SetDoneFunc(func(key tcell.Key) {
 		switch key {
