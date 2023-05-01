@@ -3,7 +3,7 @@ A Proxx game
 
 # Rules
 
-> :information_source:
+> **Note**
 >
 > The game works best with [monospaced font](https://en.wikipedia.org/wiki/Monospaced_font) in your terminal.
 
