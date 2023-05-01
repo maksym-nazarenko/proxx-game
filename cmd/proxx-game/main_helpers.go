@@ -18,7 +18,7 @@ func createBoardUI(size game.Coordinate) *tview.Table {
 		for col := 0; col < cols; col++ {
 			table.SetCell(
 				row, col,
-				tview.NewTableCell("?").
+				tview.NewTableCell(" ? ").
 					SetAlign(tview.AlignCenter),
 			)
 		}
@@ -49,7 +49,7 @@ func refreshBoardUI(board game.Board, table *tview.Table) {
 				continue
 			}
 			if tile.IsBlackhole() {
-				tableCellUI.SetText("H")
+				tableCellUI.SetText(" H ")
 				continue
 			}
 			if tile.SurroundingBlackholesCount() > 0 {
@@ -61,7 +61,7 @@ func refreshBoardUI(board game.Board, table *tview.Table) {
 				continue
 			}
 
-			tableCellUI.Text = " "
+			tableCellUI.Text = "   "
 		}
 	}
 }

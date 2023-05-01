@@ -3,6 +3,10 @@ A Proxx game
 
 # Rules
 
+> :information_source:
+>
+> The game works best with [monospaced font](https://en.wikipedia.org/wiki/Monospaced_font) in your terminal.
+
 The game is happening on a board of NxN tiles.
 
 At the beginning, all tiles are unrevealed and displayed with caption `'?'`.
