@@ -26,6 +26,7 @@ func main() {
 }
 
 func realMain(config app.Configuration) error {
+	var gameOver bool
 	if err := app.ValidateConfig(config); err != nil {
 		return err
 	}
@@ -62,15 +63,17 @@ If you avoid blackhole, number on the tile tells you how many blackholes surroun
 		defer cancel()
 		defer app.Draw()
 		defer refreshBoardUI(board, table)
+		defer table.SetSelectable(false, false)
+		gameOver = true
 		if gameResult {
 			helpText.
-				SetText("You won!!!").
+				SetText("You won!!! Press 'ESC' to exit.").
 				SetTextColor(tcell.ColorGreen).
 				SetBorderAttributes(tcell.AttrBold)
 			return
 		}
 		helpText.
-			SetText("Game over. You were almost there...").
+			SetText("Game over. You were almost there...  Press 'ESC' to exit.").
 			SetTextColor(tcell.ColorDarkRed).
 			SetBorderAttributes(tcell.AttrBold)
 	}()
@@ -79,6 +82,9 @@ If you avoid blackhole, number on the tile tells you how many blackholes surroun
 		case tcell.KeyEscape:
 			app.Stop()
 		case tcell.KeyEnter:
+			if gameOver {
+				return
+			}
 			table.SetSelectable(true, true)
 			refreshBoardUI(board, table)
 			go updateStats(ctx, stats, app)
